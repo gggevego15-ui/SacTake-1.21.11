@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "sactake_bag_wheel",
+  "version": "${version}",
+  "name": "Sactake Bag Wheel",
+  "description": "A bright pastel radial menu for selecting items from vanilla Minecraft bundles.",
+  "authors": ["gggevego15-ui"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["gggevego.sactake.client.SactakeClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
