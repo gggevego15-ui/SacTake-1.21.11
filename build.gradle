@@ -5,6 +5,7 @@ plugins {
 
 version = project.mod_version
 group = project.group_id
+def modVersion = project.version.toString()
 
 base {
     archivesName = 'sactake-bag-wheel'
@@ -30,8 +31,8 @@ dependencies {
 }
 
 processResources {
-    inputs.property 'version', project.version
-    filesMatching('fabric.mod.json') { expand 'version': version }
+    inputs.property 'version', modVersion
+    filesMatching('fabric.mod.json') { expand 'version': modVersion }
 }
 
 tasks.withType(JavaCompile).configureEach {
