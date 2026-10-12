@@ -3,11 +3,12 @@
   "id": "sactake_bag_wheel",
   "version": "${version}",
   "name": "Sactake Bag Wheel",
-  "description": "A bright pastel radial menu for selecting items from vanilla Minecraft bundles.",
+  "description": "A bright pastel radial menu for selecting and using items stored in vanilla Minecraft bundles.",
   "authors": ["gggevego15-ui"],
   "license": "MIT",
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
+    "main": ["gggevego.sactake.SactakeCommon"],
     "client": ["gggevego.sactake.client.SactakeClient"]
   },
   "depends": {

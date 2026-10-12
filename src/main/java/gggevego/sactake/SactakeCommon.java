@@ -45,7 +45,7 @@ public final class SactakeCommon implements ModInitializer {
         }
 
         BundleContents.Mutable mutable = new BundleContents.Mutable(contents);
-        mutable.toggleSelectedItem(itemIndex);
+        if (contents.getSelectedItem() != itemIndex) mutable.toggleSelectedItem(itemIndex);
         ItemStack extracted = mutable.removeOne();
         if (extracted == null || extracted.isEmpty()) return;
 
@@ -60,7 +60,8 @@ public final class SactakeCommon implements ModInitializer {
         }
 
         inventory.setItem(handSlot, extracted);
-        extracted.use(player.level(), player, InteractionHand.MAIN_HAND);
+        ItemStack used = extracted.use(player.level(), player, InteractionHand.MAIN_HAND).getObject();
+        inventory.setItem(handSlot, used);
         inventory.setChanged();
         player.containerMenu.broadcastChanges();
     }

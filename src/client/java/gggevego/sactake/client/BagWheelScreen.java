@@ -1,5 +1,7 @@
 package gggevego.sactake.client;
 
+import gggevego.sactake.network.UseBundleItemPayload;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
@@ -30,7 +32,7 @@ public final class BagWheelScreen extends Screen {
     private void refreshBundles() {
         bundleSlots.clear();
         if (minecraft == null || minecraft.player == null) return;
-        for (int i = 0; i < minecraft.player.getInventory().getContainerSize(); i++) {
+        for (int i = 0; i < Math.min(36, minecraft.player.getInventory().getContainerSize()); i++) {
             if (minecraft.player.getInventory().getItem(i).is(Items.BUNDLE)) bundleSlots.add(i);
         }
         if (!bundleSlots.contains(selectedSlot)) {
@@ -70,7 +72,7 @@ public final class BagWheelScreen extends Screen {
         int radius = wheelRadius();
 
         graphics.drawCenteredString(font, "Sactake • Мешочки", cx, cy - radius - 36, 0xFF8A4FA8);
-        graphics.drawCenteredString(font, showingContents ? "Выбери предмет внутри мешочка" : "Выбери мешочек", cx, cy - radius - 20, 0xFF755A89);
+        graphics.drawCenteredString(font, showingContents ? "Наведи на предмет и отпусти G" : "Выбери мешочек", cx, cy - radius - 20, 0xFF755A89);
         graphics.fill(cx - radius - 9, cy - radius - 9, cx + radius + 9, cy + radius + 9, 0x66FFD4ED);
         graphics.fill(cx - radius, cy - radius, cx + radius, cy + radius, 0xAAFFF9FD);
 
@@ -116,7 +118,7 @@ public final class BagWheelScreen extends Screen {
             }
             graphics.drawCenteredString(font, "Backspace — к мешочкам", cx, height - 40, 0xFF8A4FA8);
         }
-        graphics.drawCenteredString(font, "G — закрыть", cx, height - 24, 0xFF8A4FA8);
+        graphics.drawCenteredString(font, "Отпусти G — использовать выбранный предмет", cx, height - 24, 0xFF8A4FA8);
         super.render(graphics, mouseX, mouseY, delta);
     }
 
@@ -166,6 +168,10 @@ public final class BagWheelScreen extends Screen {
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_G) {
+            if (showingContents && selectedSlot >= 0 && selectedItemIndex >= 0
+                    && ClientPlayNetworking.canSend(UseBundleItemPayload.TYPE)) {
+                ClientPlayNetworking.send(new UseBundleItemPayload(selectedSlot, selectedItemIndex));
+            }
             onClose();
             return true;
         }
